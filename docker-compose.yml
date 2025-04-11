@@ -1,0 +1,119 @@
+version: "3"
+services:
+  api:
+    container_name: api
+    image: karma.azurecr.io/karma-api:0.0.34
+    build:
+      context: ./Karma.API
+    ports:
+      - '80:8080'
+    restart: unless-stopped
+    #links:
+      #- "db"
+    volumes:
+      - ./Karma.API:/src/Karma.API
+      - ./Karma.Domain:/src/Karma.Domain
+    depends_on:
+      sql-server:
+        condition: service_healthy
+    networks:
+      - karma-network
+
+  #cosmosdb:
+    #restart: always
+    #container_name: "azure-cosmosdb-emulator"
+    #hostname: "azurecosmosemulator"
+    #image: 'mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest'
+    #mem_limit: 4GB
+    #tty: true
+    #ports:
+    #- '8081:8081'
+    #- '8084:8084'
+    #- '8085:8085'
+    #- '8086:8086'
+    #volumes:
+      #- ./cosmosdb:/data
+    #environment:
+      #- AZURE_COSMOS_EMULATOR_PARTITION_COUNT=3
+      #- AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=false
+      #- AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE=172.16.238.246
+    #networks:
+      #default:
+        #ipv4_address: 172.16.238.246
+    #networks:
+      #- karma-network
+
+      # docker run --publish 8081:8081 --publish 10250-10255:10250-10255 --name linux-emulator --detach mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql-server
+    #hostname: "sql-server"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    restart: always
+    healthcheck:
+      test: [
+        "CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "${SA_PASSWORD}", "-C", "-Q", "SELECT 1"
+      ]
+      interval: 10s
+      retries: 5
+      start_period: 40s
+    volumes:
+      #- ./sqlData/dump:/var/opt/mssql
+      # NO OLVIDAR DAR LOS PERMISOS a ./sqlData/dump/data y /log
+      # when you run docker-compose up -d --build it create locally a sqlData with readonly permissions modify this in windows
+      - ./sqlDat/dump/data:/var/opt/mssql/data 
+      - ./sqlDat/dump/log:/var/opt/mssql/log
+      - ./sqlDat/dump/secrets:/var/opt/mssql/secrets
+
+      # checks TODO
+      # docker exec -it sql-server /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "MyC0m9l&xP@ssw0rd" -C
+      # data, log and secrets need all permissions
+      # enable remote connection
+      # EXEC sp_configure 'remote access', 0;
+      # GO
+      # RECONFIGURE;
+      # GO
+
+      # docker exec -it sql-server /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "MyC0m9l&xP@ssw0rd" -C -Q "EXEC sp_configure 'remote access', 1; RECONFIGURE;"
+
+      # create database for sample Karma
+      # CREATE DATABASE Karma;
+      # GO
+    networks:
+      - karma-network
+  
+  frontend:
+    image: karma.azurecr.io/karma-web:0.0.18
+    build:
+      context: ./Karma.Web
+    container_name: frontend
+    ports:
+        - 4200:4200
+    depends_on:
+      - api
+    volumes:
+    - ./Karma.Web:/app           
+    - /app/node_modules         
+   
+    networks:
+      - karma-network
+
+  #ollama:
+    #image: ollama/ollama
+    #ports:
+    #  - "11434:11434"
+    #volumes:
+    #  - ./ollamaVolumes:/root/.ollama
+
+networks:
+  karma-network:
+    name: karma-network
+    driver: bridge
+
+volumes:
+  dump:

@@ -1,0 +1,242 @@
+@import 'src/styles.scss';
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.sidenav-toggle-button{
+  background-color: #003A70;
+  border: none;
+}
+
+mat-sidenav{
+  width:20%;
+  min-width:300px;
+}
+
+mat-icon{
+  color:white;
+}
+
+.side_menu-span_item_name{
+  margin-left:10px;
+}
+
+.side_menu-logout_span{
+  font-size:16px;
+}
+
+.side_menu-menu_title{
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.side_menu-menu_title_container{
+  margin-left: 16px;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  width: 90%;
+}
+
+.side_nav-search_input{
+  width:100%;
+  border: 1px solid #ddd;
+}
+
+.side_nav-search_input_container{
+  margin-top:10px;
+  padding: 0px 10px
+}
+
+.side_menu-logout_container{
+  padding: 0px 16px;
+}
+
+.side_menu-item_main_container{
+  display:flex;
+  justify-content: space-between;
+}
+
+.side_menu-item_icon{
+  width:36px;
+  height:36px;
+}
+
+.side_menu-img_container{
+  width:10%;
+  padding:4px 0px;
+}
+
+.side_menu-items_container{
+  margin-top:10px;
+  height: 30vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.side_menu-span_item_name_container{
+  display:flex;
+  justify-content: center;
+  width:85%;
+}
+
+.side_menu-Apps_dropdown_title{
+  font-size:20px;
+  font-weight: bolder;
+}
+
+.side_menu-top_menu_container{
+  display:flex;
+}
+
+.side_menu-users_icon{
+  padding-top:14px;
+  margin-right:20px;
+}
+
+.side_menu-users_item{
+  display:flex;
+  margin:0px 34px;
+}
+
+.example-toolbar{
+  display:flex;
+  justify-content: space-between;
+  background-color: #003A70;
+  color:white
+}
+
+.side_menu-userName_span{
+  margin-right:25px;
+}
+
+.side_menu-logout_icon:hover{
+  cursor:pointer;
+  color:blue;
+}
+
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+  z-index: 2;
+}
+
+.side_menu-toolbar_main_container{
+  display:flex;
+  justify-content: space-between;
+}
+
+h1.example-app-name {
+  //margin-left: 8px;
+  margin:0px 0px 0px 0px;
+  font-size:35px;
+}
+
+.mat-drawer-inner-container{
+  width:98% !important;
+}
+
+.example-sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+      causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+      `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+}
+
+.side_menu-logout_button:hover{
+  cursor: pointer;
+}
+
+.app_content{
+  background-color: rgb(238,238,238);
+}
+
+.side_nav-router_outlet_container{
+  width:80%;
+  border-radius: 10px;
+  height: 86vh;
+}
+
+.router_outlet_background_white{
+  // background-color: white;
+}
+
+.router_outlet_background_grey{
+  background-color: rgb(238,238,238);
+}
+
+.side_nav-router_outlet_main_container{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.sidenav_menu-title_container{
+  display:flex;
+}
+
+.side_menu-top_menu_button{
+  padding-top: 7px;
+}
+
+.sidenav-toggle-button:hover{
+  cursor: pointer;
+}
+
+.sidenav_menu-spitter_container{
+  
+  font-size: 30px;
+  padding-top: 5px
+}
+
+.side_nav-languages_flags_container{
+  display: flex;
+  justify-content: space-around;
+  border-top: 2px solid #ddd;
+  padding:20px 0px;
+}
+
+.flag:hover{
+
+  cursor:pointer;
+}
+
+.flag{
+  filter: grayscale(100%);
+}
+
+
+.flag-active{
+  filter: grayscale(0%);
+}
+
+.side_nav-change_language_p{
+
+  margin-top:15px;
+}
+
+.side_nav-menu_items_container{
+  height: 82vh;
+}
+
+@media ( width < $mobileViewBreakPoint ){
+
+  .side_nav-router_outlet_container{
+
+    width:100%;
+    height: 100vh;
+  }
+}

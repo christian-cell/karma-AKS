@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: karma-ingress
+  namespace: karma-dev
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-dns"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - front.best-karma-dev.com
+      secretName: karma-front-tls
+    - hosts:
+        - api.best-karma-dev.com
+      secretName: karma-api-tls
+  rules:
+  - host: front.best-karma-dev.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: karma-dev-web
+            port:
+              number: 4200
+  - host: api.best-karma-dev.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: karma-dev-api
+            port:
+              number: 3030
+
+

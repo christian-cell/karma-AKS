@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: karmawebdev-cert
+  namespace: karma-dev
+spec:
+  secretName: karmawebdev-tls # Nombre del secreto que contendrá el certificado
+  issuerRef:
+    name: letsencrypt-prod # El Issuer que creamos antes
+    kind: Issuer
+  commonName: dev.karmawebdev.com
+  dnsNames:
+    - dev.karmawebdev.com
+    #- dev.karma.api
+

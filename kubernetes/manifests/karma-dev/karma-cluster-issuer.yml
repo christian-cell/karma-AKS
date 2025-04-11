@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-dns
+spec:
+  acme:
+    email: christian.garcia-martin@viseo.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-dns-key
+    solvers:
+    - dns01:
+        azureDNS:
+          clientID: 3fdf436a-6eab-48b0-a0f1-e43e36fef59e
+          clientSecretSecretRef:
+            name: azure-dns-secret
+            key: client-secret
+          tenantID: 7f1515ce-eca9-44de-8704-a993e9998a9a
+          subscriptionID: d65a3138-5e37-4af7-9663-8a8aeec6634a
+          resourceGroupName: "karma-dev"
+          hostedZoneName: best-karma-dev.com

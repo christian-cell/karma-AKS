@@ -1,0 +1,181 @@
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches" >
+    <mat-toolbar color="primary" class="example-toolbar">
+  
+      <div class="side_menu-top_menu_container" >
+        <div class="side_menu-top_menu_button">
+          <button class="sidenav-toggle-button" mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+        </div>
+        <div class="sidenav_menu-title_container">
+          <div class="sidenav_menu-title_hone_container">
+            <!-- <h1 class="example-app-name">Viseo | </h1> -->
+            <!-- <img [ngSrc]="'icons/viseo.png'" alt="viseo logo" width="110" height="40" priority> -->
+          </div>
+          <div class="sidenav_menu-spitter_container">|</div>
+          <div>
+           <!--  <img [ngSrc]="'icons/chat.png'" alt="viseo chat logo" width="110" height="40" priority> -->
+          </div>
+        </div>
+      </div>
+  
+      
+      <div>
+        <div>
+  
+          @if( windowWidth > mobileViewBreakPoint ){
+        
+            <span  class="side_menu-userName_span" >{{ userName }}</span>
+          }
+  
+          <mat-icon class="side_menu-logout_button" (click)="Logout()">lock</mat-icon> 
+         
+          <!-- <div (click)="Logout()" > Logout </div> -->
+        </div>
+      </div>
+      
+    </mat-toolbar>
+  
+    <mat-sidenav-container 
+      class="example-sidenav-container"
+      [style.marginTop.px]="mobileQuery.matches ? 56 : 0"
+    >
+  
+      <mat-sidenav opened="false" #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+        [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+  
+        <div class="side_nav-menu_items_container">
+          <!-- <mat-nav-list>
+    
+            <div>
+              <div (click)="snav.toggle()" class="side_menu-users_item" >
+                <a 
+                  mat-list-item 
+                  [routerLink]="'conversation'"
+                > {{ 'CHAT' | translate }} </a>
+              </div>
+    
+            </div>
+    
+          </mat-nav-list> -->
+    
+          <mat-nav-list>
+    
+            <div>
+
+              <div (click)="snav.toggle()"  class="side_menu-users_item" >
+                <a 
+                  mat-list-item 
+                  [routerLink]="'documents'"
+                > Documentos<!-- {{ 'DOCUMENT_MANAGEMENT' | translate }} -->  </a>
+              </div>
+    
+            </div>
+    
+          </mat-nav-list>
+    
+          <mat-nav-list> 
+    
+            <div>
+              <div (click)="snav.toggle()"  class="side_menu-users_item" >
+                <a 
+                  mat-list-item 
+                  [routerLink]="'images'"
+                > Images<!-- {{ 'IMAGE_GENERATOR' | translate }} --> </a>
+              </div>
+    
+            </div>
+            
+          </mat-nav-list>
+
+          <mat-nav-list> 
+    
+            <div>
+              <div (click)="snav.toggle()"  class="side_menu-users_item" >
+                <a 
+                  mat-list-item 
+                  [routerLink]="'users'"
+                > Users<!-- {{ 'USERS' | translate }} --> </a>
+              </div>
+    
+            </div>
+            
+          </mat-nav-list>
+  
+         <!--  <mat-nav-list> 
+    
+            <div>
+              <div (click)="snav.toggle()" class="side_menu-users_item" >
+                <a 
+                  mat-list-item 
+                  [routerLink]="'stats'"
+                > Stats</a>
+              </div>
+    
+            </div>
+            
+          </mat-nav-list> -->
+        </div>
+
+        <!-- <mat-nav-list> 
+  
+          <div class="side_nav-languages_flags_container" >
+
+            <div> 
+              <img 
+                class="flag" 
+                (click)="ChangeLanguage('en')" 
+                [ngSrc]="'http://purecatamphetamine.github.io/country-flag-icons/3x2/GB.svg'" 
+                alt="england flag" 
+                width="30" 
+                height="30"
+                [ngClass]="{ 'flag-active' : selectedLanguage === 'en' }"
+              > 
+            </div>
+
+            <div> 
+              <img 
+                class="flag" 
+                (click)="ChangeLanguage('es')" 
+                [ngSrc]="'http://purecatamphetamine.github.io/country-flag-icons/3x2/ES.svg'" 
+                alt="spain flag" 
+                width="30" 
+                height="30"
+                [ngClass]="{ 'flag-active' : selectedLanguage === 'es' }"
+              > 
+            </div>
+
+            <div> 
+              <img 
+                class="flag" 
+                (click)="ChangeLanguage('fr')" 
+                [ngSrc]="'http://purecatamphetamine.github.io/country-flag-icons/3x2/FR.svg'" 
+                alt="spain flag" 
+                width="30" 
+                height="30"
+                [ngClass]="{ 'flag-active' : selectedLanguage === 'fr' }"
+              > 
+            </div>
+
+          </div>
+          
+        </mat-nav-list> -->
+  
+        
+      </mat-sidenav>
+  
+      <mat-sidenav-content class="app_content">
+        <div class="side_nav-router_outlet_main_container">
+          
+          <div 
+            class="side_nav-router_outlet_container" 
+             
+          >
+  
+            <router-outlet></router-outlet>
+  
+          </div>
+          
+        </div>
+      </mat-sidenav-content>
+  
+    </mat-sidenav-container>
+  </div>
