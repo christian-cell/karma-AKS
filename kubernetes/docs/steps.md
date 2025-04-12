@@ -27,6 +27,10 @@
 ## Ssl cert
 - [Create valid ssl cert](#create-valid-ssl-cert)
 
+## Monitoring
+- [Install prometheus and grafana](#install-prometheus-and-grafana)
+- [Link grafana with prometheus](#link-grafana-with-prometheus)
+
 ## Create rg
 - [Index](#index)
 
@@ -378,3 +382,118 @@ kubectl apply -f karma-cluster-issuer.yml
 ```
 
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.1 --set installCRDs=true
+
+
+## Install prometheus and grafana
+- [Index](#index)
+
+1. Create ns for monitoring
+```
+kubectl create namespace monitoring
+```
+2. Add Prometheus Helm repo
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+``` 
+3. Update repositories searching for some upgrade
+´´´
+helm repo update
+´´´
+4. Apply all Prometheus resources in the ns monitoring
+```
+helm install prometheus prometheus-community/prometheus --namespace monitoring
+```
+5. Check if all monitoring pods are running
+```
+kubectl get pods -n monitoring
+```
+6. Let's expose the deploy created previously with a LoadBalancer service named prometheus-server-ext
+```
+kubectl expose service prometheus-server --namespace monitoring --type=LoadBalancer --target-port=9090 --name=prometheus-server-ext
+```
+7. Get external ip
+```
+kubectl -n monitoring get svc
+```
+
+in my case 
+## Prometheus ip
+
+![alt text](images/pick_prometheus_ip.png)
+
+8. Get Grafana Helm chart
+```
+helm repo add grafana https://grafana.github.io/helm-charts
+```
+
+9. Install Grafana Helm chart
+```
+helm install grafana grafana/grafana --namespace monitoring
+```
+
+10. Get base 64 user/password and decode it
+```
+kubectl get secret --namespace monitoring grafana -o yaml | Select-String -Pattern 'admin-password'
+```
+
+11. Create Grafana Loadbalancer service
+```
+kubectl expose service grafana --namespace monitoring --type=LoadBalancer --target-port=3000 --name=grafana-ext
+```
+
+12. Get ExternalId
+```
+kubectl -n monitoring get svc
+```
+
+in my case
+
+![alt text](images/get_grafana_external_ip.png)
+
+13. paste in Browser
+
+![alt text](images/grafana_web.png)
+
+
+## Link grafana with prometheus
+- [Index](#index)
+
+1. Click Create new dashboard
+
+![alt text](images/grafana_create_first_dashboard.png)
+
+2. Add visualization
+
+![alt text](images/grafana_add_visualization.png)
+
+3. Configure Prometheus data source
+
+![alt text](images/grafana_configura_new_data_source.png)
+
+4. Select Prometheus
+
+![alt text](images/grafana_select_prometheus.png)
+
+5. Get prometheus ip address
+
+- [Prometheus ip](#prometheus-ip)
+
+6. Paste in connection and click Save
+
+![alt text](images/paste_in_connection.png)
+
+7. Import dashboard
+
+![alt text](images/import_dashboard.png)
+
+8. Type 3662
+
+![alt text](images/type_3662.png)
+
+9. Select the prometheus you set before
+
+![alt text](images/select_your_data_import.png)
+
+10. happy_monitoring 🎉📈
+
+![alt text](images/happy_monitoring.png)
