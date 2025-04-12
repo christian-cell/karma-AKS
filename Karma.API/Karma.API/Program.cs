@@ -62,8 +62,9 @@ namespace Karma.API
             builder.Services
                 .AddAutoMapper(typeof(UserMapperProfile).Assembly, typeof(User).Assembly);
              
-            builder.Services.AddDbContextDependencies(builder.Configuration["Azure:SQL:DockerConnectionString"]!);
+            //builder.Services.AddDbContextDependencies(builder.Configuration["Azure:SQL:DockerConnectionString"]!);
             //builder.Services.AddDbContextDependencies(builder.Configuration["Azure:SQL:ConnectionString"]!);
+            builder.Services.AddDbContextDependencies(builder.Configuration["Azure:SQL:kubernetesConnectionString"]!);
              
             /*
              * just a reminder : stop program compilation and go to Domains location
@@ -115,7 +116,7 @@ namespace Karma.API
 
             app.MapControllers();
             
-            /*using (var scope = app.Services.CreateScope())
+            using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
 
@@ -123,7 +124,7 @@ namespace Karma.API
                 {
                     dbContext.Database.Migrate();
                 }
-            }*/
+            }
 
             app.Run();
         }

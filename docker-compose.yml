@@ -2,7 +2,7 @@ version: "3"
 services:
   api:
     container_name: api
-    image: karma.azurecr.io/karma-api:0.0.34
+    image: karma.azurecr.io/karma-api:0.0.36
     build:
       context: ./Karma.API
     ports:
