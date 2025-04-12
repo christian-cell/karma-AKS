@@ -15,6 +15,7 @@
 - [Api resource](#api-resource)
 - [Web resource](#web-resource)
 - [Expose deployments](#expose-deployments)
+- [Sql server](#sql-server)
 
 ## Ingress
 - [Install ingress](#install-ingress)
@@ -176,6 +177,68 @@ container exposing Angular app in port 4200
 ```
 kubectl -n karma-dev expose deploy karma-dev-web --name=karma-dev-web --type=LoadBalancer --target-port=4200 --port=4200 --dry-run=client -o yaml > svc-karma-dev-web.yml
 ```
+
+## Sql server
+[Index](#index)
+
+Take a look in ````pvc-dev.yml```` and ````storage-class.yml````
+and apply both.
+```
+kubectl apply -f .\storage-class.yml
+``` 
+```
+kubectl apply -f .\pvc-dev.yml
+```
+
+Check if status is ````Bound````
+```
+kubectl -n karma-dev get pvc
+```
+
+and 
+
+![alt text](Images/check_storage_class_azure.png)
+
+Apply secret and deployment , first the secret
+
+```
+kubectl apply -f .\mssql-secret.yml
+```
+```
+kubectl apply -f .\mssql-deploy.yml
+```
+
+Create manifest for service of type LoadBalancer that expose mssql-deployment
+```
+kubectl -n karma-dev expose deploy mssql-deployment --name=mssql-svc --port=1433 --target-port=1433 --type=LoadBalancer --dry-run=client -o yaml > mssql-svc.yml
+```
+
+Apply it
+```
+kubectl apply -f .\mssql-svc.yml
+```
+
+To create database karma Exec the pod
+```
+kubectl -n karma-dev exec -it mssql-deployment-596897d687-qgpjn -- /bin/bash
+```
+
+and run 
+```
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "MyC0m9l&xP@ssw0rd" -C -Q "EXEC sp_configure 'remote access', 1; RECONFIGURE;"
+```
+```
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "MyC0m9l&xP@ssw0rd" -C -Q "CREATE DATABASE Karma"
+```
+```
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "MyC0m9l&xP@ssw0rd" -C -Q "GO"
+```
+
+Finally connect
+```
+Server=172.205.40.203,1433;Database=master;User Id=sa;Password=MyC0m9l&xP@ssw0rd;Encrypt=true;TrustServerCertificate=true;
+```
+🎉🍾🍻🎊
 
 ## Install ingress
 - [Index](#index)

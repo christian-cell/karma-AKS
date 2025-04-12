@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Karma.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97f6a140597c28373c35c766a16f54c668ab7d3b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7be712436204980e4034b6161569270813f0471a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Karma.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Karma.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
