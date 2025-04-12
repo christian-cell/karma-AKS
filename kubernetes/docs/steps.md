@@ -225,18 +225,18 @@ kubectl -n karma-dev exec -it mssql-deployment-596897d687-qgpjn -- /bin/bash
 
 and run 
 ```
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "MyC0m9l&xP@ssw0rd" -C -Q "EXEC sp_configure 'remote access', 1; RECONFIGURE;"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "mypassword" -C -Q "EXEC sp_configure 'remote access', 1; RECONFIGURE;"
 ```
 ```
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "MyC0m9l&xP@ssw0rd" -C -Q "CREATE DATABASE Karma"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "mypassword" -C -Q "CREATE DATABASE Karma"
 ```
 ```
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "MyC0m9l&xP@ssw0rd" -C -Q "GO"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "mypassword" -C -Q "GO"
 ```
 
 Finally connect
 ```
-Server=172.205.40.203,1433;Database=master;User Id=sa;Password=MyC0m9l&xP@ssw0rd;Encrypt=true;TrustServerCertificate=true;
+Server=172.205.40.203,1433;Database=master;User Id=sa;Password=mypassword;Encrypt=true;TrustServerCertificate=true;
 ```
 🎉🍾🍻🎊
 
