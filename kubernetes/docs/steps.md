@@ -336,8 +336,10 @@ helm repo add jetstack https://charts.jetstack.io
 helm repo update
 ```
 
-3. Install cert-manager
-``` helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.12.0 --set installCRDs=true ```
+3. Get cert-manager and custom resource definitions
+``` 
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.12.0 --set installCRDs=true 
+```
 
 4. Install cert manager
 ```
@@ -356,33 +358,84 @@ kubectl get pods -n cert-manager
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.12.0/cert-manager.crds.yaml
 ```
 
-6. Create service principal
+6. Install custom resource definitions of cert-manager
 ```
-az ad sp create-for-rbac --name "cert-manager-dns" --role "DNS Zone Contributor" --scopes /subscriptions/d65a3138-5e37-4af7-9663-8a8aeec6634a/resourceGroups/karma-dev/providers/Microsoft.Network/dnszones/best-karma-dev.com
-```
-
-pick values from json
-```
-{
-  "appId": "appId or clientId",
-  "displayName": "cert-manager-dns",
-  "password": "password",
-  "tenant": "tenant"
-}
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.1 --set installCRDs=true
 ```
 
-7. run this command
+7. Create service principal for dns-cert-manager
+In Azure Portal
+  - go to app registration
+  - create one
+  - retrieve the value secret , tenantId and subscriptionId
+
+![alt text](images/retrieve_secret_value.png)
+
+  - go to dns zone and create a role ``` DNS Zone Contributor ``` for the service principal
+
+![alt text](images/iam-rol-assignement.png)
+![alt text](images/dns_zone_contributor_rol.png)
+![alt text](images/bind_role_to_service_principal.png)
+
+8. run this command
 ```
-kubectl create secret generic azure-dns-secret --namespace cert-manager --from-literal=client-secret=<password>
+kubectl create secret generic azure-dns-secret --namespace cert-manager --from-literal=client-secret=<secret_value>
 ```
 
-8. Create Cluster issuer
+9. Create Cluster issuer after add secret and service principal references
+
+![alt text](images/cluster_issuer_manifests.png)
+
 ```
 kubectl apply -f karma-cluster-issuer.yml
 ```
 
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.1 --set installCRDs=true
+10. Modify the ingress like this , adding tls cration instruction
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: karma-ingress
+  namespace: karma-dev
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-dns"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - front.best-karma-dev.com
+      secretName: karma-front-tls
+    - hosts:
+        - api.best-karma-dev.com
+      secretName: karma-api-tls
+  rules:
+  - host: front.best-karma-dev.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: karma-dev-web
+            port:
+              number: 4200
+  - host: api.best-karma-dev.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: karma-dev-api
+            port:
+              number: 3030
+```
 
+11. Check the there are not errors such as ``` karma-front-tls secret not found ``` or ``` karma-api-tls ```
+```
+kubectl -n karma-dev describe ingress karma-ingress
+```
 
 ## Install prometheus and grafana
 - [Index](#index)

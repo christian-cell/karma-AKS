@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Karma.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+952b0d0763d9645ad5fdf04ac35b759c2447fafd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9378f214b230059d138c190474d295c37757f042")]
 [assembly: System.Reflection.AssemblyProductAttribute("Karma.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Karma.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
